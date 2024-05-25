@@ -299,8 +299,6 @@ aside li {
   gap: 1rem;
 }
 
-
-
 /*
 * --------------------------------------------------
 * routes/__index
@@ -465,4 +463,17 @@ aside li {
 
 .account-logout {
   display: inline-block;
+}
+
+/* detail page button container  */
+
+.detail-page__button-container {
+  display: flex;
+  gap: 10px;
+  button {
+    padding: 6px 15px;
+    outline: none;
+    border: 2px solid gray;
+    border-radius: 5px;
+  }
 }
