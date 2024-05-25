@@ -11,6 +11,7 @@ import {
 } from '@shopify/hydrogen';
 import {getVariantUrl} from '~/lib/variants';
 import AddToFavorite from '~/components/AddToFavorite';
+import useAddToFavorites from '~/hooks/useAddToFavorites';
 
 /**
  * @type {MetaFunction<typeof loader>}
@@ -210,10 +211,13 @@ function ProductPrice({selectedVariant}) {
  */
 function ProductForm({product, selectedVariant, variants}) {
   const [isFavorite, setIsFavorite] = useState(false);
+  const {isLoading, addToFavorites} = useAddToFavorites();
 
-  const handleFavoriteClick = (id) => {
+  const handleFavoriteClick = async (id) => {
     setIsFavorite(!isFavorite);
-    // alert(id);
+
+    const result = await addToFavorites(id);
+    console.log('handleFavoriteClick', result);
   };
 
   return (
@@ -246,6 +250,8 @@ function ProductForm({product, selectedVariant, variants}) {
           {selectedVariant?.availableForSale ? 'Add to cart' : 'Sold out'}
         </AddToCartButton>
         <AddToFavorite
+          isLoading={isLoading}
+          disabled={isLoading}
           isFavorite={isFavorite}
           handleFavoriteClick={handleFavoriteClick}
           productId={product.id}
