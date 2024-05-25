@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Suspense} from 'react';
+/* eslint-disable prettier/prettier */
+import {Suspense, useState} from 'react';
 import {defer, redirect} from '@shopify/remix-oxygen';
 import {Await, Link, useLoaderData} from '@remix-run/react';
 import {
