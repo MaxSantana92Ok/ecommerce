@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import {useState} from 'react';
+import {toast} from 'sonner';
 import {removeProductToFavorite} from '~/api/service';
 
 const useRemoveToFavorites = () => {
@@ -13,6 +14,7 @@ const useRemoveToFavorites = () => {
       productId,
     });
     setIsLoading(false);
+    if (response) toast.success('Remove successfully.');
     return response;
   };
 

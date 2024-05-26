@@ -106,7 +106,7 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Toaster />
+        <Toaster position="top-right" />
         <Layout {...data}>
           <Outlet />
         </Layout>
