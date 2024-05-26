@@ -2,10 +2,10 @@
 import {useState} from 'react';
 import {removeProductToFavorite} from '~/api/service';
 
-const useRemoveToFavorites = (productId) => {
+const useRemoveToFavorites = () => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const removeToFavorites = async () => {
+  const removeToFavorites = async (productId) => {
     const userId = localStorage.getItem('userId');
     setIsLoading(true);
     const response = await removeProductToFavorite({userId, productId});
