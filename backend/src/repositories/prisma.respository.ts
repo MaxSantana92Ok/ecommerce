@@ -18,6 +18,12 @@ export class PrismaRepository implements IFavoriteRepository {
 
   async removeFavorite(params: {userId: string, productId: string}): Promise<void> {
     const {userId, productId} = params
-    await prisma.favorite.deleteMany({ where: { userId, productId } });
+    await prisma.favorite.delete({ 
+      where: {
+      userId_productId: {
+        userId,
+        productId
+      }
+    }});
   }
 }

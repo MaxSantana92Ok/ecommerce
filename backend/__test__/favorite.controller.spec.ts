@@ -2,16 +2,14 @@
 
 import request from 'supertest';
 import app from '../src/index';
-import { FavoriteService } from '../src/services/favorite.service';
-
-jest.mock("../src/services/favorite.service.ts");
+import { MockRepository } from '../src/repositories/mock.repository';
 
 describe('FavoriteController', () => {
-  let favoriteService: jest.Mocked<FavoriteService>;
+  
+  const respository = new MockRepository();
+  const mockData = respository.mockData
 
   beforeEach(() => {
-    favoriteService = new FavoriteService() as jest.Mocked<FavoriteService>;
-    jest.clearAllMocks();
   });
 
   describe('GET /api/favorites', () => {
@@ -22,15 +20,14 @@ describe('FavoriteController', () => {
     });
 
     it('should return 200 and the list of favorites', async () => {
-      const mockFavorites = [{ id: 1, userId: 'user1', productId: 'product1' }];
-      favoriteService.getFavorites.mockResolvedValue(mockFavorites);
 
+      const mockUser = mockData[0].userId;
       const response = await request(app)
         .get('/api/favorites')
-        .query({ userId: 'user1' });
+        .query({ userId:  mockUser});
 
       expect(response.status).toBe(200);
-      expect(response.body).toEqual(mockFavorites);
+      expect(response.body).toEqual(mockData.filter(fav => fav.userId === mockUser));
     });
   });
 
@@ -46,13 +43,9 @@ describe('FavoriteController', () => {
     });
 
     it('should return 200 and the added favorite', async () => {
-      const mockFavorite = { id: 1, userId: 'user1', productId: 'product1' };
-      favoriteService.addFavorite.mockResolvedValue(mockFavorite);
+      const mockFavorite = { userId: 'user1', productId: 'product9' };
 
-      const response = await request(app).post('/api/favorites').send({
-        userId: 'user1',
-        productId: 'product1',
-      });
+      const response = await request(app).post('/api/favorites').send(mockFavorite);
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual(mockFavorite);
@@ -71,7 +64,6 @@ describe('FavoriteController', () => {
     });
 
     it('should return 204 if the favorite is removed', async () => {
-      favoriteService.removeFavorite.mockResolvedValue();
 
       const response = await request(app).delete('/api/favorites').send({
         userId: 'user1',

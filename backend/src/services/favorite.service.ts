@@ -1,13 +1,12 @@
 // /src/services/favorite.service.ts
 
 import { IFavoriteRepository } from "../repositories/favorite.respository";
-import { MockRepository } from "../repositories/mock.repository";
 
 export class FavoriteService {
   private favoriteRepository: IFavoriteRepository;
 
-  constructor(repo?:IFavoriteRepository) {
-    this.favoriteRepository = repo || new MockRepository();
+  constructor(repo:IFavoriteRepository) {
+    this.favoriteRepository = repo;
   }
 
   async getFavorites(userId: string) {

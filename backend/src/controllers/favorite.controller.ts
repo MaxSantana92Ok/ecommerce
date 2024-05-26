@@ -7,8 +7,8 @@ import { BadRequestError } from '../errors/badRequest.error';
 export class FavoriteController {
   private favoriteService: FavoriteService;
 
-  constructor(service?: FavoriteService) {
-    this.favoriteService = service || new FavoriteService();
+  constructor(service: FavoriteService) {
+    this.favoriteService = service;
   }
 
   async getFavorites(req: Request, res: Response, next: NextFunction) {
