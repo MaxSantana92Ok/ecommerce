@@ -1,6 +1,10 @@
 ## Getting started
 
-**Requirements:**
+**Requirements Backend:**
+
+- View on the corresponding folder (Folder Backend).
+
+**Requirements Frontend:**
 
 - Node.js version 18.0.0 or higher
 
