@@ -3,9 +3,9 @@ import {routes} from './config';
 import API from './instance';
 
 export const addProductToFavorite = async (param) => {
-  return await API.post(`${routes.favorites}`, param);
+  return await API.post(`${routes.favorite}`, param);
 };
 
 export const removeProductToFavorite = async (param) => {
-  return await API.delete(`${routes.favorites}`, param);
+  return await API.delete(`${routes.favorite}`, param);
 };
