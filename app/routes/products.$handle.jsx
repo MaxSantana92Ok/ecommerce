@@ -1,4 +1,5 @@
-import {Suspense} from 'react';
+/* eslint-disable prettier/prettier */
+import {Suspense, useState} from 'react';
 import {defer, redirect} from '@shopify/remix-oxygen';
 import {Await, Link, useLoaderData} from '@remix-run/react';
 import {
@@ -9,6 +10,8 @@ import {
   CartForm,
 } from '@shopify/hydrogen';
 import {getVariantUrl} from '~/lib/variants';
+import AddToFavorite from '~/components/AddToFavorite';
+import useAddToFavorites from '~/hooks/useAddToFavorites';
 
 /**
  * @type {MetaFunction<typeof loader>}
@@ -48,7 +51,7 @@ export async function loader({params, request, context}) {
     product.selectedVariant = firstVariant;
   } else {
     // if no selected variant was returned from the selected options,
-    // we redirect to the first variant's url with it's selected options applied
+    // we redirect to the first variant's url with its selected options applied
     if (!product.selectedVariant) {
       throw redirectToFirstVariant({product, request});
     }
@@ -56,9 +59,9 @@ export async function loader({params, request, context}) {
 
   // In order to show which variants are available in the UI, we need to query
   // all of them. But there might be a *lot*, so instead separate the variants
-  // into it's own separate query that is deferred. So there's a brief moment
+  // into its own separate query that is deferred. So there's a brief moment
   // where variant options might show as available when they're not, but after
-  // this deffered query resolves, the UI will update.
+  // this deferred query resolves, the UI will update.
   const variants = storefront.query(VARIANTS_QUERY, {
     variables: {handle},
   });
@@ -106,7 +109,7 @@ export default function Product() {
 }
 
 /**
- * @param {{image: ProductVariantFragment['image']}}
+ * @param {{ image: ProductVariantFragment['image'] }}
  */
 function ProductImage({image}) {
   if (!image) {
@@ -207,6 +210,16 @@ function ProductPrice({selectedVariant}) {
  * }}
  */
 function ProductForm({product, selectedVariant, variants}) {
+  const [isFavorite, setIsFavorite] = useState(false);
+  const {isLoading, addToFavorites} = useAddToFavorites();
+
+  const handleFavoriteClick = async (id) => {
+    setIsFavorite(!isFavorite);
+
+    const result = await addToFavorites(id);
+    console.log('handleFavoriteClick', result);
+  };
+
   return (
     <div className="product-form">
       <VariantSelector
@@ -217,30 +230,39 @@ function ProductForm({product, selectedVariant, variants}) {
         {({option}) => <ProductOptions key={option.name} option={option} />}
       </VariantSelector>
       <br />
-      <AddToCartButton
-        disabled={!selectedVariant || !selectedVariant.availableForSale}
-        onClick={() => {
-          window.location.href = window.location.href + '#cart-aside';
-        }}
-        lines={
-          selectedVariant
-            ? [
-                {
-                  merchandiseId: selectedVariant.id,
-                  quantity: 1,
-                },
-              ]
-            : []
-        }
-      >
-        {selectedVariant?.availableForSale ? 'Add to cart' : 'Sold out'}
-      </AddToCartButton>
+      <div className="detail-page__button-container">
+        <AddToCartButton
+          disabled={!selectedVariant || !selectedVariant.availableForSale}
+          onClick={() => {
+            window.location.href = window.location.href + '#cart-aside';
+          }}
+          lines={
+            selectedVariant
+              ? [
+                  {
+                    merchandiseId: selectedVariant.id,
+                    quantity: 1,
+                  },
+                ]
+              : []
+          }
+        >
+          {selectedVariant?.availableForSale ? 'Add to cart' : 'Sold out'}
+        </AddToCartButton>
+        <AddToFavorite
+          isLoading={isLoading}
+          disabled={isLoading}
+          isFavorite={isFavorite}
+          handleFavoriteClick={handleFavoriteClick}
+          productId={product.id}
+        />
+      </div>
     </div>
   );
 }
 
 /**
- * @param {{option: VariantOption}}
+ * @param {{ option: VariantOption }}
  */
 function ProductOptions({option}) {
   return (

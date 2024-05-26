@@ -14,6 +14,7 @@ import favicon from './assets/favicon.svg';
 import resetStyles from './styles/reset.css?url';
 import appStyles from './styles/app.css?url';
 import {Layout} from '~/components/Layout';
+import {Toaster} from 'sonner';
 
 /**
  * This is important to avoid re-fetching root queries on sub-navigations
@@ -105,6 +106,7 @@ export default function App() {
         <Links />
       </head>
       <body>
+        <Toaster />
         <Layout {...data}>
           <Outlet />
         </Layout>
