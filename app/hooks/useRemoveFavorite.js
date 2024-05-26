@@ -6,8 +6,9 @@ const useRemoveToFavorites = (productId) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const removeToFavorites = async () => {
+    const userId = localStorage.getItem('userId');
     setIsLoading(true);
-    const response = await removeProductToFavorite(productId);
+    const response = await removeProductToFavorite({userId, productId});
     setIsLoading(false);
     return response;
   };
