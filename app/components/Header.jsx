@@ -1,6 +1,9 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import {Await, NavLink} from '@remix-run/react';
-import {Suspense} from 'react';
+import {startTransition, Suspense, useEffect, useState} from 'react';
 import {useRootLoaderData} from '~/lib/root-data';
+import {v4 as uuidv4} from 'uuid';
 
 /**
  * @param {HeaderProps}
@@ -55,7 +58,6 @@ export function HeaderMenu({menu, primaryDomainUrl, viewport}) {
       )}
       {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
         if (!item.url) return null;
-
         // if the url is internal, we strip the domain
         const url =
           item.url.includes('myshopify.com') ||
@@ -95,17 +97,54 @@ export function HeaderMenu({menu, primaryDomainUrl, viewport}) {
 /**
  * @param {Pick<HeaderProps, 'isLoggedIn' | 'cart'>}
  */
-function HeaderCtas({isLoggedIn, cart}) {
+function HeaderCtas({cart}) {
+  const [isLoggedIn, setIsLoggedIn] = useState(null);
+  const createAuthId = () => {
+    return uuidv4();
+  };
+
+  async function handleAuth() {
+    const userId = await new Promise((resolve) =>
+      setTimeout(resolve(createAuthId()), 5000),
+    );
+    startTransition(() => {
+      setIsLoggedIn(userId);
+      console.log('USER ID', userId);
+    });
+  }
+
+  const handleLogOut = () => {
+    console.log('LOG OUT');
+    localStorage.setItem('userId', '');
+    setIsLoggedIn(null);
+  };
+
+  useEffect(() => {
+    const userId = localStorage.getItem('userId');
+    console.log('userId', userId);
+
+    if (!userId) {
+      if (isLoggedIn) localStorage.setItem('userId', isLoggedIn);
+      else handleAuth();
+    } else setIsLoggedIn(userId);
+  }, [isLoggedIn]);
+
   return (
     <nav className="header-ctas" role="navigation">
       <HeaderMenuMobileToggle />
-      <NavLink prefetch="intent" to="/account" style={activeLinkStyle}>
-        <Suspense fallback="Sign in">
-          <Await resolve={isLoggedIn} errorElement="Sign in">
-            {(isLoggedIn) => (isLoggedIn ? 'Account' : 'Sign in')}
-          </Await>
-        </Suspense>
-      </NavLink>
+      <Suspense fallback="Sign in">
+        <Await resolve={isLoggedIn} errorElement="Sign in">
+          {(isLoggedIn) =>
+            isLoggedIn ? (
+              <div onClick={handleLogOut}>
+                <h4>Sign Out</h4>
+              </div>
+            ) : (
+              'Sign in'
+            )
+          }
+        </Await>
+      </Suspense>
       <SearchToggle />
       <CartToggle cart={cart} />
     </nav>
