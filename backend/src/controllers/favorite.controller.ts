@@ -3,6 +3,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { FavoriteService } from '../services/favorite.service';
 import { BadRequestError } from '../errors/badRequest.error';
+import Favorite from '../entities/fav.entity';
 
 export class FavoriteController {
   private favoriteService: FavoriteService;
@@ -39,7 +40,7 @@ export class FavoriteController {
 
   async removeFavorite(req: Request, res: Response, next: NextFunction) {
     try {
-      const { userId, productId } = req.body;
+      const { userId, productId } = req.query as unknown as Favorite;
 
       if (!userId || !productId) throw new BadRequestError('userId and productId are required');
 
