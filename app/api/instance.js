@@ -3,7 +3,7 @@ import axios from 'axios';
 import {toast} from 'sonner';
 
 const API = axios.create({
-  baseURL: 'http://localhost:3001',
+  baseURL: 'http://localhost:5000',
 });
 
 API.interceptors.response.use(

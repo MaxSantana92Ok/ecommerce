@@ -6,8 +6,9 @@ const useAddToFavorites = (productId) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const addToFavorites = async () => {
+    const userId = localStorage.getItem('userId');
     setIsLoading(true);
-    const response = await addProductToFavorite(productId);
+    const response = await addProductToFavorite({userId, productId});
     setIsLoading(false);
     return response;
   };
