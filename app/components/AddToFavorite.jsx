@@ -9,7 +9,11 @@ const AddToFavorite = ({
   isLoading,
 }) => {
   return (
-    <button disabled={disabled} onClick={() => handleFavoriteClick(productId)}>
+    <button
+      style={{border: isFavorite ? '2px solid red' : '2px solid green'}}
+      disabled={disabled}
+      onClick={() => handleFavoriteClick(productId)}
+    >
       {!isLoading && (isFavorite ? 'Remove favorite' : 'Add to favorite')}
       {isLoading && 'Adding...'}
     </button>
