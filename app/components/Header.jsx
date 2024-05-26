@@ -77,6 +77,17 @@ export function HeaderMenu({menu, primaryDomainUrl, viewport}) {
           </NavLink>
         );
       })}
+      {/* Nuevo enlace a la página de favoritos */}
+      <NavLink
+        className="header-menu-item"
+        end
+        onClick={closeAside}
+        prefetch="intent"
+        style={activeLinkStyle}
+        to="/favorites"
+      >
+        Favorites
+      </NavLink>
     </nav>
   );
 }
