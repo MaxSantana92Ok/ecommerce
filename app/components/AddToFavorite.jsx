@@ -10,7 +10,7 @@ const AddToFavorite = ({
 }) => {
   return (
     <button
-      style={{border: isFavorite ? '2px solid red' : '2px solid green'}}
+      style={{color: isFavorite ? 'red' : 'green'}}
       disabled={disabled}
       onClick={() => handleFavoriteClick(productId)}
     >

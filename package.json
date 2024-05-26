@@ -44,6 +44,7 @@
     "eslint-plugin-hydrogen": "0.12.2",
     "json-server": "^1.0.0-beta.0",
     "prettier": "^2.8.4",
+    "ts-node": "^10.9.2",
     "typescript": "^5.2.2",
     "vite": "^5.1.0",
     "vite-tsconfig-paths": "^4.3.1"
