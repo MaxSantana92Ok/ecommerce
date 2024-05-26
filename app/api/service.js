@@ -7,5 +7,7 @@ export const addProductToFavorite = async (param) => {
 };
 
 export const removeProductToFavorite = async (param) => {
-  return await API.delete(`${routes.favorite}`, param);
+  return await API.delete(
+    `${routes.favorite}?userId=${param.userId}&productId=${param.productId}`,
+  );
 };
