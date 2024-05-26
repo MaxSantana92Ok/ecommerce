@@ -12,6 +12,7 @@ import {
 import {getVariantUrl} from '~/lib/variants';
 import AddToFavorite from '~/components/AddToFavorite';
 import useAddToFavorites from '~/hooks/useAddToFavorites';
+import useRemoveToFavorites from '~/hooks/useRemoveFavorite';
 
 /**
  * @type {MetaFunction<typeof loader>}
@@ -212,12 +213,17 @@ function ProductPrice({selectedVariant}) {
 function ProductForm({product, selectedVariant, variants}) {
   const [isFavorite, setIsFavorite] = useState(false);
   const {isLoading, addToFavorites} = useAddToFavorites();
+  const {removeToFavorites} = useRemoveToFavorites();
 
   const handleFavoriteClick = async (id) => {
+    if (isFavorite) {
+      const result = await removeToFavorites(id);
+      console.log('handleFavoriteClick', result);
+    } else {
+      const result = await addToFavorites(id);
+      console.log('handleFavoriteClick', result);
+    }
     setIsFavorite(!isFavorite);
-
-    const result = await addToFavorites(id);
-    console.log('handleFavoriteClick', result);
   };
 
   return (
