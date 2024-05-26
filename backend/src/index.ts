@@ -8,7 +8,7 @@ import { errorHandler } from './middlewares/errorHandler.middleware';
 const app = express();
 app.use(json());
 
-app.use('/api/favorites', favoriteRouter);
+app.use('/api', favoriteRouter);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;

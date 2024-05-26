@@ -3,6 +3,7 @@
 import { PrismaClient } from '@prisma/client';
 import { IFavoriteRepository } from './favorite.respository';
 import Favorite from '../entities/fav.entity';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 const prisma = new PrismaClient();
 
@@ -18,12 +19,25 @@ export class PrismaRepository implements IFavoriteRepository {
 
   async removeFavorite(params: {userId: string, productId: string}): Promise<void> {
     const {userId, productId} = params
-    await prisma.favorite.delete({ 
-      where: {
-      userId_productId: {
-        userId,
-        productId
+    try {
+      await prisma.favorite.delete({ 
+        where: {
+        userId_productId: {
+          userId,
+          productId
+        }
+      }});
+    }
+   catch (error) {
+      if(!(error instanceof PrismaClientKnownRequestError )){
+        throw error
       }
-    }});
+
+      // P2025 code:
+      // An operation failed because it depends on one or more records that were required but not found (Record to delete does not exist)
+      if(error.code !== "P2025"){
+        throw error
+      }
+    }
   }
 }

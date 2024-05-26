@@ -1,7 +1,7 @@
 // /__tests__/favorite.service.spec.ts
 
-import { MockRepository } from "../src/repositories/mock.repository";
-import { FavoriteService } from "../src/services/favorite.service";
+import { MockRepository } from "../repositories/mock.repository";
+import { FavoriteService } from "./favorite.service";
 
 
 describe('FavoriteService', () => {
@@ -10,7 +10,7 @@ describe('FavoriteService', () => {
   
   const MOCK_DATA = repository.mockData
   beforeAll(() => {
-    favoriteService = new FavoriteService();
+    favoriteService = new FavoriteService(repository);
   });
 
   test('should add favorites', async () => {
